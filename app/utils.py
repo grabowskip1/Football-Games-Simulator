@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 def norm(x: str) -> str:
-    return str(x).strip().lower().replace(".", "").replace("-", " ").replace("&", "and")
+    return str(x).strip().lower().replace('.', '').replace('-', ' ').replace('&', 'and')
 
 def ema(values, alpha=0.6, default=np.nan):
     s = pd.Series(values, dtype=float).dropna()
