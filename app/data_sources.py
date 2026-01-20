@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import os
 import requests
 import pandas as pd
@@ -29,25 +29,43 @@ class LeagueState:
 
 def _csv_path_for(key: str) -> str:
     cfg = LEAGUES[key]
-    return os.path.join(SAVE_DIR, f"{today_stamp()}{cfg['csv_suffix']}.csv")
+    return os.path.join(SAVE_DIR, f'{today_stamp()}{cfg['csv_suffix']}.csv')
+
+
+
+def _cleanup_old_csv_files(csv_suffix: str, keep_path: str) -> None:
+    keep_abs = os.path.abspath(keep_path)
+    for filename in os.listdir(SAVE_DIR):
+        if not filename.endswith(f'{csv_suffix}.csv'):
+            continue
+        full_path = os.path.join(SAVE_DIR, filename)
+        if os.path.abspath(full_path) == keep_abs:
+            continue
+        # best-effort cleanup
+        try:
+            os.remove(full_path)
+        except OSError:
+            pass
+
 
 def _ensure_csv(key: str) -> str:
     cfg = LEAGUES[key]
     p = _csv_path_for(key)
     if not os.path.exists(p):
-        r = requests.get(cfg["csv_url"], timeout=25)
+        r = requests.get(cfg['csv_url'], timeout=25)
         if r.status_code != 200:
-            raise RuntimeError("CSV download failed")
-        with open(p, "wb") as f:
+            raise RuntimeError('CSV download failed')
+        with open(p, 'wb') as f:
             f.write(r.content)
+        _cleanup_old_csv_files(csv_suffix=cfg['csv_suffix'], keep_path=p)
     return p
 
 def fetch_standings_fd(comp_code: str) -> pd.DataFrame | None:
     if not FD_API_TOKEN:
         return None
-    url = f"{FD_BASE}/competitions/{comp_code}/standings"
-    headers = {"X-Auth-Token": FD_API_TOKEN}
-    params = {"season": FD_SEASON}
+    url = f'{FD_BASE}/competitions/{comp_code}/standings'
+    headers = {'X-Auth-Token': FD_API_TOKEN}
+    params = {'season': FD_SEASON}
     try:
         r = requests.get(url, headers=headers, params=params, timeout=20)
         if r.status_code != 200:
@@ -55,20 +73,20 @@ def fetch_standings_fd(comp_code: str) -> pd.DataFrame | None:
         js = r.json()
     except Exception:
         return None
-    standings = js.get("standings", [])
-    total = next((s for s in standings if s.get("type") == "TOTAL"), None)
+    standings = js.get('standings', [])
+    total = next((s for s in standings if s.get('type') == 'TOTAL'), None)
     if not total:
         return None
     rows = []
-    for e in total.get("table", []) or []:
-        pos = e.get("position")
-        tn = (e.get("team") or {}).get("name") or (e.get("team") or {}).get("shortName")
+    for e in total.get('table', []) or []:
+        pos = e.get('position')
+        tn = (e.get('team') or {}).get('name') or (e.get('team') or {}).get('shortName')
         if pos is None or not tn:
             continue
-        rows.append({"rank": int(pos), "team": str(tn)})
+        rows.append({'rank': int(pos), 'team': str(tn)})
     if not rows:
         return None
-    return pd.DataFrame(rows).sort_values("rank").reset_index(drop=True)
+    return pd.DataFrame(rows).sort_values('rank').reset_index(drop=True)
 
 def build_elo(d: pd.DataFrame, teams: list, K=20.0, HFA_ELO=60.0) -> dict:
     elo = {t: 1500.0 for t in teams}
@@ -101,24 +119,24 @@ def load_league(key: str) -> LeagueState:
     needed = ['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']
     for c in needed:
         if c not in df.columns:
-            raise ValueError(f"Missing column: {c}")
+            raise ValueError(f'Missing column: {c}')
 
     teams = sorted(pd.unique(df[['HomeTeam','AwayTeam']].values.ravel('K')))
     HAS_SHOTS = all(c in df.columns for c in ['HS','AS'])
     HAS_CORNERS = all(c in df.columns for c in ['HC','AC'])
     LEAG_AVG_H, LEAG_AVG_A, HFA = league_baselines(df)
 
-    standings_df = fetch_standings_fd(cfg["fd_comp"])
+    standings_df = fetch_standings_fd(cfg['fd_comp'])
     rank_lookup, table_n = {}, 20
     if standings_df is not None and not standings_df.empty:
-        table_n = max(int(standings_df["rank"].max()), 20)
+        table_n = max(int(standings_df['rank'].max()), 20)
         for _, r_ in standings_df.iterrows():
-            rank_lookup[norm(r_["team"])] = int(r_["rank"])
+            rank_lookup[norm(r_['team'])] = int(r_['rank'])
 
-    aliases = cfg["aliases"].copy()
+    aliases = cfg['aliases'].copy()
     name_map = {}
     if standings_df is not None and not standings_df.empty:
-        api_names = {norm(n): n for n in standings_df["team"]}
+        api_names = {norm(n): n for n in standings_df['team']}
         for t in teams:
             keyn = norm(t)
             target = aliases.get(keyn)
@@ -146,7 +164,7 @@ def load_league(key: str) -> LeagueState:
     elo = build_elo(df, teams)
 
     return LeagueState(
-        key=key, label=cfg["label"], df=df, teams=teams,
+        key=key, label=cfg['label'], df=df, teams=teams,
         HAS_SHOTS=HAS_SHOTS, HAS_CORNERS=HAS_CORNERS,
         LEAG_AVG_H=LEAG_AVG_H, LEAG_AVG_A=LEAG_AVG_A, HFA=HFA,
         standings_df=standings_df if standings_df is not None else pd.DataFrame(),
