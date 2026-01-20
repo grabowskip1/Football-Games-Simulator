@@ -13,6 +13,7 @@ probabilities, and possession estimates.
 
 Below is the actual simulation pipeline used in the project. Each stage feeds
 into the next and is directly reflected in the codebase:
+```
 ┌────────────────────┐
 │    Data Sources    │
 │ (football-data API │
@@ -58,6 +59,7 @@ into the next and is directly reflected in the codebase:
 │ - Win probabilities│
 │ - Possession       │
 └────────────────────┘
+```
 
 ------------------------------------------------------------------------
 
@@ -145,7 +147,7 @@ pip install requests pandas numpy customtkinter pytest
 
 Add your **API TOKEN** in the file app/config.py at:
 ``` python
-FD_API_TOKEN = os.getenv("FD_API_TOKEN", "YOUR_API")
+FD_API_TOKEN = os.getenv("FD_API_TOKEN", "YOUR_API_KEY")
 ```
 
 ------------------------------------------------------------------------
