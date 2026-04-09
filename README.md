@@ -5,13 +5,13 @@ The simulator predicts football match outcomes using statistical modeling
 based on historical match data, league standings, and team strength indicators.
 Match results are generated using an Expected Goals (xG) framework combined
 with Poisson-based score simulation, producing realistic scorelines,
-probabilities, and possession estimates.
+probabilities, and possession estimates. 
 
 ------------------------------------------------------------------------
+
 ## 🛠️ Tech Stack
+python, pandas, numpy, requests, customtkinter, pytest, api
 
-
-Python, Pandas, NumPy, Requests, CustomTkinter, Pytest, football-data.org API
 ------------------------------------------------------------------------
 
 ## 🧭 System Overview
