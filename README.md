@@ -8,6 +8,11 @@ with Poisson-based score simulation, producing realistic scorelines,
 probabilities, and possession estimates.
 
 ------------------------------------------------------------------------
+## 🛠️ Tech Stack
+
+
+Python, Pandas, NumPy, Requests, CustomTkinter, Pytest, football-data.org API
+------------------------------------------------------------------------
 
 ## 🧭 System Overview
 
