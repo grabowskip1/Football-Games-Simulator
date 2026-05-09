@@ -1,4 +1,4 @@
-# ⚽ Football Match Simulator (Premier League & La Liga)
+# Football Match Simulator (Premier League & La Liga)
 
 A data-driven football match simulator written in Python.
 The simulator predicts football match outcomes using statistical modeling
@@ -9,12 +9,12 @@ probabilities, and possession estimates.
 
 ------------------------------------------------------------------------
 
-## 🛠️ Tech Stack
+## Tech Stack
 python, pandas, numpy, requests, customtkinter, pytest, api
 
 ------------------------------------------------------------------------
 
-## 🧭 System Overview
+## System Overview
 
 Below is the actual simulation pipeline used in the project. Each stage feeds
 into the next and is directly reflected in the codebase:
@@ -68,7 +68,7 @@ into the next and is directly reflected in the codebase:
 
 ------------------------------------------------------------------------
 
-## 🧠 Mathematical Summary
+## Mathematical Summary
 
     ---------------------------------------------------------------------------
     Component          Model                     Description
@@ -94,7 +94,7 @@ into the next and is directly reflected in the codebase:
 
 ------------------------------------------------------------------------
 
-## 🧮 Example Prediction Flow
+## Example Prediction Flow
 
 1.  Download or load cached historical match data (CSV)\
 2.  Load live league standings\
@@ -112,7 +112,7 @@ The expected goals for the home team are computed as:
 
 ------------------------------------------------------------------------
 
-## 🧩 Features
+## Features
 
 -   Supports **Premier League (ENG)** and **La Liga (SPA)**\
 -   Automatically downloads fresh match data (CSV format)\
@@ -127,7 +127,7 @@ The expected goals for the home team are computed as:
 
 ------------------------------------------------------------------------
 
-## 🗂️ Project Structure
+## Project Structure
 
 engine/
   match_engine.py     # core match simulation logic (xG + Poisson)
@@ -142,7 +142,7 @@ tests/
 
 ------------------------------------------------------------------------
 
-## 🧰 Requirements
+## Requirements
 
 Before running the project, install the required dependencies:
 
@@ -157,7 +157,7 @@ FD_API_TOKEN = os.getenv("FD_API_TOKEN", "YOUR_API_KEY")
 
 ------------------------------------------------------------------------
 
-## 🧪 Testing
+## Testing
 The match simulation engine is covered by unit tests using pytest.
 Tests include:
 validation of expected goal parameters
@@ -170,7 +170,7 @@ pytest
 
 ------------------------------------------------------------------------
 
-## 🚀 Usage
+## Usage
 
 Run the app with:
 
@@ -182,7 +182,7 @@ Then choose a league (`ENG` or `SPA`), select teams, and click
 
 ------------------------------------------------------------------------
 
-## 🧮 Example Output
+## Example Output
 
     Premier League (ENG)
     Man United vs Brighton
@@ -196,7 +196,7 @@ Then choose a league (`ENG` or `SPA`), select teams, and click
 
 ------------------------------------------------------------------------
 
-## ⚽ Real Match Comparison Simulations
+## Real Match Comparison Simulations
 
 | Date       | Home Team       | Away Team     | Predicted Score | Predicted Possession | Actual Score | Actual Possession |
 |-------------|------------------|----------------|------------------|----------------------|----------------|--------------------|
